@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <version>0.0.1-SNAPSHOT</version>
+    <parent>
+        <groupId>com.perrebser</groupId>
+        <artifactId>inventory-management</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>inventorymanagement-api</artifactId>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>5.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/open-api.yml</inputSpec>
+                            <enablePostProcessFile>false</enablePostProcessFile>
+                            <library>spring-boot</library>
+                            <generateModels>true</generateModels>
+                            <generatorName>spring</generatorName>
+                            <generateApiDocumentation>true</generateApiDocumentation>
+                            <generateModelDocumentation>true</generateModelDocumentation>
+                            <generateApiTests>true</generateApiTests>
+                            <configOptions>
+                                <removeOperationIdPrefix>true</removeOperationIdPrefix>
+                                <apiNameSuffix>DTO</apiNameSuffix>
+                                <delegatePattern >true</delegatePattern >
+                                <generateApi>true</generateApi>
+                                <skipOperationExample>false</skipOperationExample>
+                                <java17>true</java17>
+                                <dateLibrary>java17</dateLibrary>
+                                <groupId>com.perrebser</groupId>
+                                <basePackage>com.perrebser</basePackage>
+                                <modelPackage>com.perrebser.model</modelPackage>
+                                <apiPackage>com.perrebser.api</apiPackage>
+                                <configPackage>com.perrebser</configPackage>
+                                <configHelp>true</configHelp>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>false</skipDefaultInterface>
+                                <useTags>true</useTags>
+                            </configOptions>
+                            <additionalProperties>
+                                <additionalProperty>modelNameSuffix=DTO</additionalProperty>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

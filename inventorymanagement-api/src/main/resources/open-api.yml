@@ -1,0 +1,158 @@
+---
+openapi: 3.0.0
+info:
+  title: Product API
+  description: API for managing products
+  version: 1.0.0
+servers:
+- url: http://localhost:8082/
+paths:
+  /products:
+    get:
+      tags:
+      - products
+      summary: Get all products
+      operationId: getAllProducts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorObject'
+              example:
+                status: 400
+                description: Bad Request
+                message: Invalid Request.
+  /products/{productId}:
+    get:
+      tags:
+      - products
+      summary: Get a product by ID
+      operationId: getProductById
+      parameters:
+      - name: productId
+        in: path
+        description: ID of the product to retrieve
+        required: true
+        style: simple
+        explode: false
+        schema:
+          minimum: 1
+          type: integer
+      responses:
+        "200":
+          description: Product found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorObject'
+              example:
+                status: 404
+                description: NotFound
+                message: Resouce not found.
+components:
+  schemas:
+    Product:
+      required:
+      - name
+      - price
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the product
+        name:
+          type: string
+          description: The name of the product
+        description:
+          type: string
+          description: A description of the product
+        quantity:
+          type: integer
+          description: The quantity of the product
+        price:
+          type: number
+          description: The price of the product
+        category_id:
+          type: integer
+          description: The ID of the category the product belongs to
+        provider_id:
+          type: integer
+          description: The ID of the provider that supplies the product
+    errorObject:
+      title: errorObject
+      type: object
+      properties:
+        status:
+          maximum: 599
+          minimum: 100
+          type: integer
+          description: Status code of response
+          format: int32
+          example: 400
+        message:
+          maxLength: 100
+          pattern: "^[A-Za-z0-9 .]"
+          type: string
+          description: Error message
+          example: Bad Request
+        description:
+          maxLength: 100
+          pattern: "^[A-Za-z0-9 .]"
+          type: string
+          description: Error description
+          example: Bad Request
+      additionalProperties: false
+      description: Error details
+  responses:
+    "400BadRequestError":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          example:
+            status: 400
+            description: Bad Request
+            message: Invalid Request.
+    "404NotFoundError":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          example:
+            status: 404
+            description: NotFound
+            message: Resouce not found.
+  parameters:
+    productId:
+      name: productId
+      in: path
+      description: ID of the product to delete
+      required: true
+      style: simple
+      explode: false
+      schema:
+        minimum: 1
+        type: integer
+      example: 2
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

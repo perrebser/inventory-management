@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: user_password
+      MYSQL_ROOT_PASSWORD: my_secure_password
+    ports:
+      - "8091:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    container_name: my-mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: my_secure_password
+        PMA_HOST: db
+        PMA_PORT: 3306
+    ports:
+      - "8090:80"
+    depends_on:
+      - db
+    container_name: my-phpmyadmin
+
+volumes:
+  db_data:

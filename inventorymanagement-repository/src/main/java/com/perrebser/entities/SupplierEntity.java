@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "Supplier")
-public class SupplierRepository {
+public class SupplierEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "supplier_id")
@@ -18,7 +18,7 @@ public class SupplierRepository {
     private String supplierName;
 
     @OneToMany(mappedBy = "supplier")
-    private List<ProductRepository> products;
+    private List<ProductEntity> products;
 
     @Column(name = "address")
     private String address;

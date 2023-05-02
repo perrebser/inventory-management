@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Entity
 @Data
 @Table(name ="Product" )
-public class ProductRepository {
+public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +17,11 @@ public class ProductRepository {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private CategoryRepository category;
+    private CategoryEntity category;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")
-    private SupplierRepository supplier;
+    private SupplierEntity supplier;
 
     @Column(name = "name")
     private String name;
@@ -32,4 +32,7 @@ public class ProductRepository {
 
     @Column(name = "price")
     private BigDecimal price;
+
+    @OneToOne(mappedBy = "product")
+    private StockEntity stock;
 }

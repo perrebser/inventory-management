@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name = "category")
 @Data
 @Entity
-public class CategoryRepository {
+public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,7 @@ public class CategoryRepository {
     private Long categoryId;
 
     @OneToMany(mappedBy = "category")
-    private List<ProductRepository> products;
+    private List<ProductEntity> products;
 
     @Column(name = "category_name",nullable = false)
     private String categoryName;

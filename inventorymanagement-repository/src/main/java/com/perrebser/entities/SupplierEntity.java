@@ -12,7 +12,7 @@ public class SupplierEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "supplier_id")
-    private Integer supplierId;
+    private Long supplierId;
 
     @Column(name = "supplier_name", nullable = false)
     private String supplierName;

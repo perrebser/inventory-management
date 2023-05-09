@@ -5,12 +5,15 @@ info:
   description: API for managing products
   version: 1.0.0
 servers:
-- url: http://localhost:8082/
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DEVPERREBSER_1/InventoryAPI/1.0.0
+  - url: http://localhost:8082/
 paths:
   /products:
     get:
       tags:
-      - products
+        - products
       summary: Get all products
       operationId: getAllProducts
       responses:
@@ -35,42 +38,36 @@ paths:
   /products/{productId}:
     get:
       tags:
-      - products
-      summary: Get a product by ID
+        - products
+      summary: Get Product by Id
       operationId: getProductById
       parameters:
-      - name: productId
-        in: path
-        description: ID of the product to retrieve
-        required: true
-        style: simple
-        explode: false
-        schema:
-          minimum: 1
-          type: integer
+        - $ref: '#/components/parameters/productId'
       responses:
         "200":
-          description: Product found
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
-        "404":
-          description: Not Found
+                items:
+                  $ref: '#/components/schemas/Product'
+        "400":
+          description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorObject'
               example:
-                status: 404
-                description: NotFound
-                message: Resouce not found.
+                status: 400
+                description: Bad Request
+                message: Invalid Request.
+
 components:
   schemas:
     Product:
       required:
-      - name
-      - price
+        - name
+        - price
       type: object
       properties:
         id:

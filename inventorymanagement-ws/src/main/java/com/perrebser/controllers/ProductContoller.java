@@ -1,6 +1,7 @@
 package com.perrebser.controllers;
 
 import com.perrebser.api.ProductsApi;
+import com.perrebser.entities.ProductEntity;
 import com.perrebser.mapper.ProductWSMapper;
 import com.perrebser.model.ProductDTO;
 import com.perrebser.model.ProductObject;
@@ -28,5 +29,17 @@ public class ProductContoller implements ProductsApi {
         ProductResponseDTO productResponseDTO= productWSMapper.asProductResponseDto(productObject);
 
         return ResponseEntity.ok(productResponseDTO);
+    }
+
+    @Override
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+        List<ProductObject> productObjects=productService.findAllProducts();
+        return ResponseEntity.ok(productWSMapper.asProductDtoList(productObjects));
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteProduct(String productCode) {
+        productService.deleteProductByCode(productCode);
+        return ResponseEntity.ok().build();
     }
 }

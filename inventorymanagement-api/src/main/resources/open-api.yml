@@ -48,12 +48,13 @@ paths:
             schema:
               $ref: '#/components/schemas/Product'
             example:
-              name: "New Product"
-              description: "A new product"
-              quantity: 10
-              price: 19.99
-              category_id: 1
-              provider_id: 1
+              code: "PHG-23"
+              name: "Updated Product"
+              description: "An updated product"
+              quantity: 15
+              price: 29.99
+              category_id: 2
+              provider_id: 2
       responses:
         "201":
           description: Created
@@ -111,6 +112,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Product'
             example:
+              code: "PHG-23"
               name: "Updated Product"
               description: "An updated product"
               quantity: 15
@@ -136,30 +138,26 @@ paths:
                 description: Bad Request
                 message: Invalid Request.
     delete:
-      tags:
-        - products
-      summary: delete a product
-      operationId: deleteProduct
-      parameters:
-        - $ref: '#/components/parameters/productCode'
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/Product'
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorObject'
-              example:
-                status: 400
-                description: Bad Request
-                message: Invalid Request.
+        tags:
+          - products
+        summary: Delete a product
+        operationId: deleteProduct
+        parameters:
+          - $ref: '#/components/parameters/productCode'
+        responses:
+            "200":
+              description: Succesful Operation
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/errorObject'
+                  example:
+                    status: 400
+                    description: Bad Request
+                    message: Invalid Request.
+
 
 
 
@@ -172,9 +170,6 @@ components:
         - price
       type: object
       properties:
-        id:
-          type: integer
-          description: The internal id of the product
         code:
           type: string
           description: The unique identifier for the product
@@ -222,6 +217,10 @@ components:
           type: number
           description: The price of the product
           example: '1100'
+        quantity:
+          type: integer
+          description: Stock of the product
+          example: '234'
     errorObject:
       title: errorObject
       type: object

@@ -31,7 +31,7 @@ Then run either from command line
 Or from IntelliJ (`com.perrebser.Application`)
 
 ## API Documentation
-The API documentation is automatically generated using Swagger UI and OpenAPI. You can access it at http://localhost:8092/swagger-ui.html.
+The API documentation is automatically generated using Swagger UI and OpenAPI. You can access it at http://localhost:8092/perrebser/swagger-ui/index.html#.
 
 API Endpoints
 The API provides the following endpoints for managing the entities in the database:

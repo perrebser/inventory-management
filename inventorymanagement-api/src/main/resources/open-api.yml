@@ -5,12 +5,15 @@ info:
   description: API for managing products
   version: 1.0.0
 servers:
-- url: http://localhost:8082/
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DEVPERREBSER_1/InventoryAPI/1.0.0
+  - url: http://localhost:8082/
 paths:
   /products:
     get:
       tags:
-      - products
+        - products
       summary: Get all products
       operationId: getAllProducts
       responses:
@@ -32,49 +35,141 @@ paths:
                 status: 400
                 description: Bad Request
                 message: Invalid Request.
-  /products/{productId}:
-    get:
+    post:
       tags:
-      - products
-      summary: Get a product by ID
-      operationId: getProductById
-      parameters:
-      - name: productId
-        in: path
-        description: ID of the product to retrieve
+        - products
+      summary: Create a new product
+      operationId: createProduct
+      requestBody:
+        description: The product to be created
         required: true
-        style: simple
-        explode: false
-        schema:
-          minimum: 1
-          type: integer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            example:
+              code: "PHG-23"
+              name: "Updated Product"
+              description: "An updated product"
+              quantity: 15
+              price: 29.99
+              category_id: 2
+              provider_id: 2
       responses:
-        "200":
-          description: Product found
+        "201":
+          description: Created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-        "404":
-          description: Not Found
+        "400":
+          description: Bad Request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorObject'
               example:
-                status: 404
-                description: NotFound
-                message: Resouce not found.
+                status: 400
+                description: Bad Request
+                message: Invalid Request.
+  /products/{productCode}:
+    get:
+      tags:
+        - products
+      summary: Get Product by code
+      operationId: getProductByCode
+      parameters:
+        - $ref: '#/components/parameters/productCode'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/ProductResponse'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorObject'
+              example:
+                status: 400
+                description: Bad Request
+                message: Invalid Request.
+    put:
+      tags:
+        - products
+      summary: Update a product
+      operationId: updateProduct
+      parameters:
+        - $ref: '#/components/parameters/productCode'
+      requestBody:
+        description: The product to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            example:
+              code: "PHG-23"
+              name: "Updated Product"
+              description: "An updated product"
+              quantity: 15
+              price: 29.99
+              category_id: 2
+              provider_id: 2
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Product'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorObject'
+              example:
+                status: 400
+                description: Bad Request
+                message: Invalid Request.
+    delete:
+        tags:
+          - products
+        summary: Delete a product
+        operationId: deleteProduct
+        parameters:
+          - $ref: '#/components/parameters/productCode'
+        responses:
+            "200":
+              description: Succesful Operation
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/errorObject'
+                  example:
+                    status: 400
+                    description: Bad Request
+                    message: Invalid Request.
+
+
+
 components:
   schemas:
     Product:
       required:
-      - name
-      - price
+        - name
+        - price
       type: object
       properties:
-        id:
-          type: integer
+        code:
+          type: string
           description: The unique identifier for the product
         name:
           type: string
@@ -94,6 +189,36 @@ components:
         provider_id:
           type: integer
           description: The ID of the provider that supplies the product
+    Category:
+      required:
+        - categoryName
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the category
+        categoryName:
+          type: string
+          description: The name of the category
+    ProductResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The unique identifier for the product
+          example: 'IPH11P'
+        name:
+          type: string
+          description: The name of the product
+          example: 'Iphone 11 Pro'
+        price:
+          type: number
+          description: The price of the product
+          example: '1100'
+        quantity:
+          type: integer
+          description: Stock of the product
+          example: '234'
     errorObject:
       title: errorObject
       type: object
@@ -141,17 +266,17 @@ components:
             description: NotFound
             message: Resouce not found.
   parameters:
-    productId:
-      name: productId
+    productCode:
+      name: productCode
       in: path
-      description: ID of the product to delete
+      description: Code of the product
       required: true
       style: simple
       explode: false
       schema:
-        minimum: 1
-        type: integer
-      example: 2
+        minimum: 6
+        type: string
+      example: GFR234
   securitySchemes:
     basicAuth:
       type: http

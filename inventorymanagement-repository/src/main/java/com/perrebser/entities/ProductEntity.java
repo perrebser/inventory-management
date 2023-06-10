@@ -15,6 +15,9 @@ public class ProductEntity {
     @Column(name = "Id")
     private Long productId;
 
+    @Column(name = "code",unique = true)
+    private String code;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;

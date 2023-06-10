@@ -36,6 +36,9 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public ProductObject createProduct(ProductObject productObject) {
+        if(productRepository.findByCodeIgnoreCase(productObject.getCode()).isPresent()){
+            throw new RuntimeException();
+        }
           return productMapper.asProductObject(productRepository.save(productMapper.asProductEntity(productObject))) ;
     }
 

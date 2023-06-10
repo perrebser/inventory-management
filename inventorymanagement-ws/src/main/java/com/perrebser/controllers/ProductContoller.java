@@ -42,4 +42,12 @@ public class ProductContoller implements ProductsApi {
         productService.deleteProductByCode(productCode);
         return ResponseEntity.ok().build();
     }
+
+    @Override
+    public ResponseEntity<ProductDTO> createProduct(ProductDTO productDTO) {
+       ProductObject savedProduct= productService.createProduct(productWSMapper.asProductObject(productDTO));
+
+       return ResponseEntity.ok(productWSMapper.asProductDTO(savedProduct));
+
+    }
 }

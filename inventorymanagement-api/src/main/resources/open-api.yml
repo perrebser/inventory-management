@@ -5,15 +5,17 @@ info:
   description: API for managing products
   version: 1.0.0
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/DEVPERREBSER_1/InventoryAPI/1.0.0
-  - url: http://localhost:8082/
+  - url: http://localhost:8082/perrebser
+tags:
+  - name: Products
+    description: Products API.
+  - name: Category
+    description: Category API.
 paths:
-  /products:
+  /api/products:
     get:
       tags:
-        - products
+        - Products
       summary: Get all products
       operationId: getAllProducts
       responses:
@@ -37,7 +39,7 @@ paths:
                 message: Invalid Request.
     post:
       tags:
-        - products
+        - Products
       summary: Create a new product
       operationId: createProduct
       requestBody:
@@ -72,10 +74,10 @@ paths:
                 status: 400
                 description: Bad Request
                 message: Invalid Request.
-  /products/{productCode}:
+  /api/products/{productCode}:
     get:
       tags:
-        - products
+        - Products
       summary: Get Product by code
       operationId: getProductByCode
       parameters:
@@ -99,7 +101,7 @@ paths:
                 message: Invalid Request.
     put:
       tags:
-        - products
+        - Products
       summary: Update a product
       operationId: updateProduct
       parameters:
@@ -139,7 +141,7 @@ paths:
                 message: Invalid Request.
     delete:
         tags:
-          - products
+          - Products
         summary: Delete a product
         operationId: deleteProduct
         parameters:
@@ -159,7 +161,96 @@ paths:
                     message: Invalid Request.
 
 
+  /api/category:
+    post:
+      tags:
+      - Category
+      summary: Add new categories
+      description: Add new categories
+      operationId: addCategories
+      requestBody:
+        description: Categories to be Added
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryList"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryList"
+        "400":
+          $ref: "#/components/responses/400BadRequestError"
+        "401":
+          $ref: "#/components/responses/401UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/403ForbiddenError"
+        "404":
+          $ref: "#/components/responses/404NotFoundError"
+        "500":
+          $ref: "#/components/responses/500InternalServerError"
+        "503":
+          $ref: "#/components/responses/503ServiceUnavailableError"
+        "504":
+          $ref: "#/components/responses/504GatewayTimeOut"
 
+  /api/category/{code}:
+    delete:
+      tags:
+      - Category
+      summary: Delete category
+      description: Delete category by code
+      operationId: deleteCategory
+      parameters:
+        - $ref: "#/components/parameters/categoryCode"
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          $ref: "#/components/responses/400BadRequestError"
+        "401":
+          $ref: "#/components/responses/401UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/403ForbiddenError"
+        "404":
+          $ref: "#/components/responses/404NotFoundError"
+        "500":
+          $ref: "#/components/responses/500InternalServerError"
+        "503":
+          $ref: "#/components/responses/503ServiceUnavailableError"
+        "504":
+          $ref: "#/components/responses/504GatewayTimeOut"
+  /api/categories:
+    get:
+      tags:
+        - Category
+      summary: Get all categories
+      description: Get all categories
+      operationId: getCategories
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryList"
+        "400":
+          $ref: "#/components/responses/400BadRequestError"
+        "401":
+          $ref: "#/components/responses/401UnauthorizedError"
+        "403":
+          $ref: "#/components/responses/403ForbiddenError"
+        "404":
+          $ref: "#/components/responses/404NotFoundError"
+        "500":
+          $ref: "#/components/responses/500InternalServerError"
+        "503":
+          $ref: "#/components/responses/503ServiceUnavailableError"
+        "504":
+          $ref: "#/components/responses/504GatewayTimeOut"
 components:
   schemas:
     Product:
@@ -191,15 +282,23 @@ components:
           description: The ID of the provider that supplies the product
     Category:
       required:
+        - code
         - categoryName
       type: object
       properties:
-        id:
-          type: integer
+        code:
+          type: string
           description: The unique identifier for the category
+          example: EPC
         categoryName:
           type: string
           description: The name of the category
+          example: Electronics
+    CategoryList:
+      type: array
+      maxItems: 100
+      items:
+        $ref: "#/components/schemas/Category"
     ProductResponse:
       type: object
       properties:
@@ -245,26 +344,76 @@ components:
       additionalProperties: false
       description: Error details
   responses:
-    "400BadRequestError":
+    400BadRequestError:
       description: Bad Request
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/errorObject'
+            $ref: "#/components/schemas/errorObject"
           example:
             status: 400
             description: Bad Request
             message: Invalid Request.
-    "404NotFoundError":
+    401UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorObject"
+          example:
+            status: 401
+            description: Unauthorized
+            message: Unauthorized Error.
+    403ForbiddenError:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorObject"
+          example:
+            status: 403
+            description: Forbidden
+            message: Forbidden Error.
+    404NotFoundError:
       description: Not Found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/errorObject'
+            $ref: "#/components/schemas/errorObject"
           example:
             status: 404
             description: NotFound
             message: Resouce not found.
+    500InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorObject"
+          example:
+            status: 500
+            description: InternalServer
+            message: Internal Server Error.
+    503ServiceUnavailableError:
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorObject"
+          example:
+            status: 503
+            description: ServiceUnavailable
+            message: Service Unavailable.
+    504GatewayTimeOut:
+      description: Gateway Timeout
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorObject"
+          example:
+            status: 504
+            description: GatewayTimeOut
+            message: Gateway Time Out.
   parameters:
     productCode:
       name: productCode
@@ -277,6 +426,15 @@ components:
         minimum: 6
         type: string
       example: GFR234
+    categoryCode:
+      name: categoryCode
+      in: path
+      description: Code of the category
+      required: true
+      schema:
+        type: string
+      example: ALV
+
   securitySchemes:
     basicAuth:
       type: http

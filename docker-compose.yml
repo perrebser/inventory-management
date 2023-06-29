@@ -12,6 +12,7 @@ services:
     ports:
       - "8091:3306"
     volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - db_data:/var/lib/mysql
     container_name: my-mysql
 
@@ -19,9 +20,9 @@ services:
     image: phpmyadmin/phpmyadmin:latest
     restart: always
     environment:
-        MYSQL_ROOT_PASSWORD: my_secure_password
-        PMA_HOST: db
-        PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: my_secure_password
+      PMA_HOST: db
+      PMA_PORT: 3306
     ports:
       - "8090:80"
     depends_on:

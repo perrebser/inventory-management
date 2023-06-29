@@ -13,7 +13,9 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="category_id" )
-    private Long categoryId;
+    private Integer categoryId;
+
+    private  String code;
 
     @OneToMany(mappedBy = "category")
     private List<ProductEntity> products;

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api(value = "products")
+@Api(value = "Products")
 @RestController
 public class ProductContoller implements ProductsApi {
     @Autowired

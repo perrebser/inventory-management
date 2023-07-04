@@ -9,4 +9,8 @@ public interface CategoryWSMapper {
 
     CategoryDTO asCategoryDTO(CategoryObject categoryObject);
 
+    List<CategoryObject> asCategoryObjectList(List<CategoryDTO> categoryDTOList);
+
+    List<CategoryDTO> asCategoryDtoList(List<CategoryObject> categoryObjectList);
+
 }

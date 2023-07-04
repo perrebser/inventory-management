@@ -12,9 +12,16 @@ import java.util.List;
 @RestController
 public class CategoryController implements CategoryApi {
 
+     @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    CategoryWSMapper categoryWSMapper;
+
     @Override
     public ResponseEntity<List<CategoryDTO>> addCategories(List<CategoryDTO> categoryDTO) {
-        return CategoryApi.super.addCategories(categoryDTO);
+        List<CategoryObject> categoryObjects =categoryService.addCategories(categoryWSMapper.asCategoryObjectList(categoryDTO));
+        return ResponseEntity.ok(categoryWSMapper.asCategoryDtoList(categoryObjects));
     }
 
     @Override
@@ -25,5 +32,10 @@ public class CategoryController implements CategoryApi {
     @Override
     public ResponseEntity<List<CategoryDTO>> getCategories() {
         return CategoryApi.super.getCategories();
+    }
+
+    @Override
+    public ResponseEntity<CategoryDTO> updateCategory(String categoryCode, CategoryDTO categoryDTO) {
+        return CategoryApi.super.updateCategory(categoryCode, categoryDTO);
     }
 }
